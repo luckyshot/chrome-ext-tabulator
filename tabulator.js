@@ -18,15 +18,12 @@
 
     // from the array of Tab objects it makes an object with date and the array
     function makeTabGroup(tabsArr) {
-        var tabGroup = {
-                date: Date.now(),
-                id: Date.now(), // clever way to quickly get a unique ID
-                title: '',
-            };
-
-        tabGroup.tabs = tabsArr;
-
-        return tabGroup;
+        return {
+            date: Date.now(),
+            id: Date.now(), // clever way to quickly get a unique ID
+            title: '',
+            tabs: tabsArr.map(tab => ({url: tab.url, title: tab.title, pinned: tab.pinned}))
+        };
     }
 
     // filters tabGroup for stuff like pinned tabs, chrome:// tabs, etc.
@@ -54,16 +51,16 @@
 
     // saves array (of Tab objects) to localStorage
     function saveTabGroup(tabGroup) {
-        chrome.storage.sync.get('tabGroups', function (storage) {
+        chrome.storage.local.get('tabGroups', function (storage) {
             var newArr;
 
             if (storage.tabGroups) {
                 newArr = storage.tabGroups;
                 newArr.unshift(tabGroup);
 
-                chrome.storage.sync.set({ tabGroups: newArr });
+                chrome.storage.local.set({ tabGroups: newArr });
             } else {
-                chrome.storage.sync.set({ tabGroups: [ tabGroup ] });
+                chrome.storage.local.set({ tabGroups: [ tabGroup ] });
             }
         });
     }
@@ -130,11 +127,11 @@
             if (tabsArr.length == 0) {
                 chrome.tabs.create({ url: myUrl });
             }
-            done()
             if (tabsArr.length) {
                 chrome.tabs.highlight({tabs: tabsArr[0].index})
                 chrome.tabs.reload(tabsArr[0].id)
             }
+            done()
         })
     }
 
@@ -172,7 +169,7 @@
     });
 
     var Options = {};
-    chrome.storage.sync.get('options', function (storage) {
+    chrome.storage.local.get('options', function (storage) {
         Options = storage.options || { includePinnedTabs: "yes", deleteTabOnOpen: "no" };
     });
 
@@ -197,13 +194,6 @@
         contexts: ['page'],
         parentId: 'main'
     });
-    // chrome.contextMenus.create({
-    //     title: 'Test',
-    //     type: 'normal',
-    //     id: 'test',
-    //     contexts: ['page'],
-    //     parentId: 'main'
-    // });
     chrome.contextMenus.create({
         title: 'Save all but active',
         type: 'normal',
