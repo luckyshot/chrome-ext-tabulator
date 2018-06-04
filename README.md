@@ -1,5 +1,7 @@
 # <img src="images/icon48.png" alt="Tabulator icon"> Tabulator
 
+## [:checkered_flag: This fork has moved to the original branch, check it out! :arrow_right:][mainbranch]
+
 ### Tabulator is a free open-source light-weight alternative to OneTab
 
 Tabulator is a free Google Chrome extension that helps reduce tab clutter and memory usage by saving all your open tabs into lists which can be restored at another time.
@@ -31,3 +33,4 @@ can find the license information in this project in the `LICENSE` file.
 [jf]: http://jaredforsyth.com
 [per]: https://en.wikipedia.org/wiki/Permissive_free_software_licence
 [lic]: https://en.wikipedia.org/wiki/ISC_license
+[mainbranch]: https://github.com/greduan/chrome-ext-tabulator
